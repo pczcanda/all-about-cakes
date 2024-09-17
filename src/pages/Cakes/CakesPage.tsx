@@ -118,7 +118,6 @@ const CakesPage: React.FC<{}> = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseNewCakeForm}>Cancel</Button>
-            {/* <Button type="submit">Subscribe</Button> */}
           </DialogActions>
         </Dialog>
       )}
