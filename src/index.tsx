@@ -5,12 +5,25 @@ import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import CakePage from "./pages/CakePage/CakePage";
+import CakesPage from "./pages/Cakes/CakesPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/cakes",
+        element: <CakesPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "cakes/:cakeId",
+        element: <CakePage />,
+      },
+    ],
   },
 ]);
 
