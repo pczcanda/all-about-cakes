@@ -1,7 +1,13 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import App from "./App";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BaseCake } from "../types";
+import App from "./App";
 
 describe("Cakes List", () => {
   test("renders list of cakes", async () => {
@@ -52,17 +58,38 @@ describe("Cakes List", () => {
       yumFactor: 4,
     };
 
-    render(<App />);
+    window.fetch = jest.fn();
+    (window.fetch as jest.Mock).mockResolvedValueOnce({
+      json: async () => ({
+        cake: {
+          ...newCake,
+          id: 2,
+        },
+      }),
+    });
 
-    const nameField = screen.getByLabelText("Cake name");
-    const commentField = screen.getByLabelText("Comment");
-    const yumFactorField = screen.getByLabelText("Yum factor");
-    const submitButton = screen.getByRole("button");
+    await act(async () => {
+      render(<App />);
+    });
 
-    fireEvent.change(nameField, { target: { value: newCake.name } });
-    fireEvent.change(commentField, { target: { value: newCake.comment } });
-    fireEvent.change(yumFactorField, { target: { value: newCake.yumFactor } });
+    const newCakeButton = screen.getByText("Add cake");
+    userEvent.click(newCakeButton);
 
+    await waitFor(async () => {
+      const nameField = screen.getByLabelText("Cake name");
+      const commentField = screen.getByLabelText("Comment");
+      const yumFactorField = screen.getByLabelText("Yum factor");
+
+      await act(async () => {
+        fireEvent.change(nameField, { target: { value: newCake.name } });
+        fireEvent.change(commentField, { target: { value: newCake.comment } });
+        fireEvent.change(yumFactorField, {
+          target: { value: newCake.yumFactor },
+        });
+      });
+    });
+
+    const submitButton = screen.getByText("Submit new cake");
     userEvent.click(submitButton);
 
     await waitFor(() => {

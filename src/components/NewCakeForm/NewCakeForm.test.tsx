@@ -1,11 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import NewCakeForm from "./NewCakeForm";
-import userEvent from "@testing-library/user-event";
 import { BaseCake } from "../../types";
+import NewCakeForm from "./NewCakeForm";
 
 describe("<NewCakeForm /> component", () => {
   test("displays form fields", () => {
-    render(<NewCakeForm />);
+    render(<NewCakeForm onSubmit={() => {}} />);
 
     const nameField = screen.getByLabelText("Cake name");
     const commentField = screen.getByLabelText("Comment");
@@ -17,7 +16,7 @@ describe("<NewCakeForm /> component", () => {
   });
 
   test("shows the submit button as disabled until the form is valid", () => {
-    render(<NewCakeForm />);
+    render(<NewCakeForm onSubmit={() => {}} />);
 
     const submitButton = screen.getByRole("button");
     expect(submitButton).toBeDisabled();
@@ -30,7 +29,7 @@ describe("<NewCakeForm /> component", () => {
       yumFactor: 4,
     };
 
-    render(<NewCakeForm />);
+    render(<NewCakeForm onSubmit={() => {}} />);
 
     const nameField = screen.getByLabelText("Cake name");
     const commentField = screen.getByLabelText("Comment");
@@ -43,7 +42,7 @@ describe("<NewCakeForm /> component", () => {
 
     expect(nameField).toHaveValue(newCake.name);
     expect(commentField).toHaveValue(newCake.comment);
-    expect(yumFactorField).toHaveValue(newCake.yumFactor);
+    expect(yumFactorField).toHaveValue(newCake.yumFactor.toString());
 
     expect(submitButton).not.toBeDisabled();
   });
