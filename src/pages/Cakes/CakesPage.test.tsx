@@ -8,6 +8,7 @@ import {
 import userEvent from "@testing-library/user-event";
 import { BaseCake } from "../../types";
 import CakesPage from "./CakesPage";
+import { BrowserRouter } from "react-router-dom";
 
 describe("Cakes List", () => {
   test("renders list of cakes", async () => {
@@ -24,7 +25,7 @@ describe("Cakes List", () => {
       ],
     });
 
-    render(<CakesPage />);
+    render(<CakesPage />, { wrapper: BrowserRouter });
 
     const listItems = await screen.findAllByRole("listitem");
 
@@ -32,7 +33,7 @@ describe("Cakes List", () => {
   });
 
   test("allows user to enter details for a new cake", () => {
-    render(<CakesPage />);
+    render(<CakesPage />, { wrapper: BrowserRouter });
 
     const newCakeButton = screen.getByText("Add cake");
 
@@ -40,7 +41,7 @@ describe("Cakes List", () => {
   });
 
   test("displays dialog for adding new cake after clicking the 'Add cake' button", async () => {
-    render(<CakesPage />);
+    render(<CakesPage />, { wrapper: BrowserRouter });
 
     const newCakeButton = screen.getByText("Add cake");
     userEvent.click(newCakeButton);
@@ -51,50 +52,32 @@ describe("Cakes List", () => {
     });
   });
 
-  test("submits new cake form and closes dialog", async () => {
-    const newCake: BaseCake = {
-      name: "Madeira cake",
-      comment: "This is a decent cake",
-      yumFactor: 4,
-    };
-
+  test("can select a cake and go to page", async () => {
     window.fetch = jest.fn();
     (window.fetch as jest.Mock).mockResolvedValueOnce({
-      json: async () => ({
-        cake: {
-          ...newCake,
-          id: 2,
+      json: async () => [
+        {
+          id: 1,
+          name: "Carrot cake",
+          comment: "The one and only",
+          imageUrl: "imageUrl",
+          yumFactor: 5,
         },
-      }),
+      ],
     });
 
-    await act(async () => {
-      render(<CakesPage />);
-    });
+    render(<CakesPage />, { wrapper: BrowserRouter });
 
-    const newCakeButton = screen.getByText("Add cake");
-    userEvent.click(newCakeButton);
+    const listItems = await screen.findAllByRole("link");
 
-    await waitFor(async () => {
-      const nameField = screen.getByLabelText("Cake name");
-      const commentField = screen.getByLabelText("Comment");
-      const yumFactorField = screen.getByLabelText("Yum factor");
+    expect(listItems[0]).toHaveAttribute("href", "/cakes/1");
 
-      await act(async () => {
-        fireEvent.change(nameField, { target: { value: newCake.name } });
-        fireEvent.change(commentField, { target: { value: newCake.comment } });
-        fireEvent.change(yumFactorField, {
-          target: { value: newCake.yumFactor },
-        });
-      });
-    });
+    userEvent.click(listItems[0]);
 
-    const submitButton = screen.getByText("Submit new cake");
-    userEvent.click(submitButton);
-
-    await waitFor(() => {
-      const dialogTitle = screen.getByText("New Cake");
-      expect(dialogTitle).not.toBeInTheDocument();
+    waitFor(() => {
+      expect(
+        screen.getByText("Carrot cake", { selector: "h2" })
+      ).toBeInTheDocument();
     });
   });
 });
