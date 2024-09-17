@@ -4,8 +4,16 @@ import App from "./App";
 describe("Cakes List", () => {
   test("renders list of cakes", async () => {
     window.fetch = jest.fn();
-    (window.fetch as any).mockResolvedValueOnce({
-      json: async () => [{ id: "p1", title: "First post" }],
+    (window.fetch as jest.Mock).mockResolvedValueOnce({
+      json: async () => [
+        {
+          id: 1,
+          name: "Carrot cake",
+          comment: "The one and only",
+          imageUrl: "imageUrl",
+          yumFactor: 5,
+        },
+      ],
     });
 
     render(<App />);
