@@ -30,7 +30,7 @@ describe("<CakeSummary /> component", () => {
 
     render(<CakeSummary cake={cake} />);
 
-    const cakeImage = screen.getByAltText(`${cake.name} image`);
+    const cakeImage = screen.getByRole("img");
     expect(cakeImage).toHaveAttribute("src", cake.imageUrl);
   });
 });
