@@ -12,6 +12,7 @@ import CakeSummary from "../../components/CakeSummary/CakeSummary";
 import NewCakeForm from "../../components/NewCakeForm/NewCakeForm";
 import { AppError, BaseCake, CakesList } from "../../types";
 import { postNewCake } from "../../utils";
+import { Link } from "react-router-dom";
 
 const CakesPage: React.FC<{}> = () => {
   /* state */
@@ -100,7 +101,9 @@ const CakesPage: React.FC<{}> = () => {
                 mb={2}
                 key={`Cake-${cake.id}`}
               >
-                <CakeSummary cake={cake} />
+                <Link to={`/cakes/${cake.id}`}>
+                  <CakeSummary cake={cake} />
+                </Link>
               </Box>
             );
           })}
