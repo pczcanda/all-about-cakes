@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { fetchAllCakes } from "../utils";
-import { Snackbar } from "@mui/material";
+import { Box, Snackbar } from "@mui/material";
 import { AppError, CakesList } from "../types";
+import CakeSummary from "../components/CakeSummary/CakeSummary";
 
 function App() {
   /* state */
@@ -45,6 +46,23 @@ function App() {
           onClose={handleErrorFetchingCakesList}
           message={errorFetchingCakesList.message}
         />
+      )}
+
+      {!errorFetchingCakesList && (
+        <Box component="ul">
+          {cakesList.map((cake) => {
+            return (
+              <Box
+                component="li"
+                role="listitem"
+                mb={2}
+                key={`Cake-${cake.id}`}
+              >
+                <CakeSummary cake={cake} />
+              </Box>
+            );
+          })}
+        </Box>
       )}
     </main>
   );
