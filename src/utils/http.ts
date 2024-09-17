@@ -30,3 +30,15 @@ export const postNewCake = async (newCake: BaseCake) => {
 
   return data.cake as Cake;
 };
+
+export const fetchCake = async (cakeId: string) => {
+  const response = await fetch(ENDPOINTS.CAKE(cakeId));
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(`failed to fetch cake with id ${cakeId}`);
+  }
+
+  return data;
+};
