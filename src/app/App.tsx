@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { AppError, CakesList } from "../types";
 import CakeSummary from "../components/CakeSummary/CakeSummary";
+import NewCakeForm from "../components/NewCakeForm/NewCakeForm";
 
 function App() {
   /* state */
@@ -26,9 +27,19 @@ function App() {
   useEffect(() => {
     const fetchCakes = async () => {
       try {
-        const allCakes = await fetchAllCakes();
+        // const allCakes = await fetchAllCakes();
 
-        setCakesList(allCakes);
+        // setCakesList(allCakes);
+
+        setCakesList([
+          {
+            id: 1,
+            name: "Carrot cake",
+            comment: "The one and only",
+            imageUrl: "https://placehold.co/600x400",
+            yumFactor: 5,
+          },
+        ]);
       } catch (e: any) {
         // handle Error
         setErrorFetchingCakesList({
@@ -64,6 +75,7 @@ function App() {
           open={!!errorFetchingCakesList.message}
           onClose={handleErrorFetchingCakesList}
           message={errorFetchingCakesList.message}
+          color="error"
         />
       )}
 
@@ -93,7 +105,9 @@ function App() {
           <DialogTitle>
             <Typography variant="h2">New Cake</Typography>
           </DialogTitle>
-          <DialogContent></DialogContent>
+          <DialogContent sx={{ p: 2 }}>
+            <NewCakeForm />
+          </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseNewCakeForm}>Cancel</Button>
             {/* <Button type="submit">Subscribe</Button> */}
