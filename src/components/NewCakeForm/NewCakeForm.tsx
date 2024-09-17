@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import { YumFactor } from "../../types";
+import { NewCakeFormProps } from "./NewCakeFormProps";
 
-const NewCakeForm: React.FC<{}> = () => {
+const NewCakeForm: React.FC<NewCakeFormProps> = ({ onSubmit }) => {
   /* state */
   const [name, setName] = useState<string>("");
   const [comment, setComment] = useState<string>("");
@@ -22,7 +23,13 @@ const NewCakeForm: React.FC<{}> = () => {
     setYumFactor(parseInt(event.currentTarget.value) as YumFactor);
   };
 
-  const handleSubmitNewCake = () => {};
+  const handleSubmitNewCakeForm = () => {
+    onSubmit({
+      name,
+      comment,
+      yumFactor,
+    });
+  };
 
   return (
     <Box className="new-cake-form" component="form">
@@ -30,30 +37,53 @@ const NewCakeForm: React.FC<{}> = () => {
         <Box mb={1}>
           <label htmlFor="new-cake__name">Cake name</label>
         </Box>
-        <input type="text" value={name} onChange={handleChangeName} required />
+        <input
+          id="new-cake__name"
+          name="new-cake__name"
+          type="text"
+          value={name}
+          onChange={handleChangeName}
+          required
+        />
       </Box>
 
       <Box mb={2}>
         <Box mb={1}>
           <label htmlFor="new-cake__comment">Comment</label>
         </Box>
-        <textarea value={comment} onChange={handleChangeComment} required />
+        <textarea
+          id="new-cake__comment"
+          name="new-cake__comment"
+          value={comment}
+          onChange={handleChangeComment}
+          required
+        />
       </Box>
 
       <Box mb={2}>
         <Box mb={1}>
-          <label htmlFor="new-cake__comment">Yum factor</label>
-          <select value={yumFactor} onChange={handleChangeYumFactor} required>
-            <option id="yumfactor-1">1</option>
-            <option id="yumfactor-2">2</option>
-            <option id="yumfactor-3">3</option>
-            <option id="yumfactor-4">4</option>
-            <option id="yumfactor-5">5</option>
-          </select>
+          <label htmlFor="new-cake__yum-factor">Yum factor</label>
         </Box>
+        <select
+          id="new-cake__yum-factor"
+          name="new-cake__yum-factor"
+          value={yumFactor}
+          onChange={handleChangeYumFactor}
+          required
+        >
+          <option id="yumfactor-1">1</option>
+          <option id="yumfactor-2">2</option>
+          <option id="yumfactor-3">3</option>
+          <option id="yumfactor-4">4</option>
+          <option id="yumfactor-5">5</option>
+        </select>
       </Box>
 
-      <button type="submit" onClick={handleSubmitNewCake} disabled={hasValues}>
+      <button
+        type="submit"
+        onClick={handleSubmitNewCakeForm}
+        disabled={!hasValues}
+      >
         Submit new cake
       </button>
     </Box>

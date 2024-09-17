@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { fetchAllCakes } from "../utils";
 import {
   Box,
   Button,
@@ -8,11 +6,12 @@ import {
   DialogContent,
   DialogTitle,
   Snackbar,
-  Typography,
 } from "@mui/material";
-import { AppError, CakesList } from "../types";
+import { useEffect, useState } from "react";
 import CakeSummary from "../components/CakeSummary/CakeSummary";
 import NewCakeForm from "../components/NewCakeForm/NewCakeForm";
+import { AppError, BaseCake, CakesList } from "../types";
+import { postNewCake } from "../utils";
 
 function App() {
   /* state */
@@ -64,6 +63,15 @@ function App() {
     setIsAddingNewCake(false);
   };
 
+  const handleSubmitNewCakeForm = async (newCake: BaseCake) => {
+    try {
+      const newCakeResponse = await postNewCake(newCake);
+
+      setCakesList((prevCakesList) => [...prevCakesList, newCakeResponse]);
+      handleCloseNewCakeForm();
+    } catch (e) {}
+  };
+
   return (
     <main className="app">
       <header className="header">
@@ -102,11 +110,9 @@ function App() {
 
       {isAddingNewCake && (
         <Dialog open={isAddingNewCake} onClose={handleCloseNewCakeForm}>
-          <DialogTitle>
-            <Typography variant="h2">New Cake</Typography>
-          </DialogTitle>
+          <DialogTitle>New Cake</DialogTitle>
           <DialogContent sx={{ p: 2 }}>
-            <NewCakeForm />
+            <NewCakeForm onSubmit={handleSubmitNewCakeForm} />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseNewCakeForm}>Cancel</Button>
