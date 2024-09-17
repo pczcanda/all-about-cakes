@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { fetchAllCakes } from "../utils";
-import { Box, Button, Snackbar } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { AppError, CakesList } from "../types";
 import CakeSummary from "../components/CakeSummary/CakeSummary";
 
@@ -40,6 +49,10 @@ function App() {
     setIsAddingNewCake(true);
   };
 
+  const handleCloseNewCakeForm = () => {
+    setIsAddingNewCake(false);
+  };
+
   return (
     <main className="app">
       <header className="header">
@@ -73,6 +86,19 @@ function App() {
             );
           })}
         </Box>
+      )}
+
+      {isAddingNewCake && (
+        <Dialog open={isAddingNewCake} onClose={handleCloseNewCakeForm}>
+          <DialogTitle>
+            <Typography variant="h2">New Cake</Typography>
+          </DialogTitle>
+          <DialogContent></DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseNewCakeForm}>Cancel</Button>
+            {/* <Button type="submit">Subscribe</Button> */}
+          </DialogActions>
+        </Dialog>
       )}
     </main>
   );

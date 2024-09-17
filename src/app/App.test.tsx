@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import App from "./App";
 import userEvent from "@testing-library/user-event";
 
@@ -32,14 +32,15 @@ describe("Cakes List", () => {
     expect(newCakeButton).toBeInTheDocument;
   });
 
-  test("displays dialog for adding new cake after clicking the 'Add cake' button", () => {
+  test("displays dialog for adding new cake after clicking the 'Add cake' button", async () => {
     render(<App />);
 
     const newCakeButton = screen.getByText("Add cake");
     userEvent.click(newCakeButton);
 
-    const dialogTitle = screen.getByText("New Cake");
-
-    expect(dialogTitle).toBeInTheDocument();
+    await waitFor(() => {
+      const dialogTitle = screen.getByText("New Cake");
+      expect(dialogTitle).toBeInTheDocument();
+    });
   });
 });
