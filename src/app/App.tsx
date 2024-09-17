@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchAllCakes } from "../utils";
-import { Box, Snackbar } from "@mui/material";
+import { Box, Button, Snackbar } from "@mui/material";
 import { AppError, CakesList } from "../types";
 import CakeSummary from "../components/CakeSummary/CakeSummary";
 
@@ -10,6 +10,8 @@ function App() {
   const [errorFetchingCakesList, setErrorFetchingCakesList] = useState<
     AppError | undefined
   >();
+
+  const [isAddingNewCake, setIsAddingNewCake] = useState<boolean>(false);
 
   /* effects */
   useEffect(() => {
@@ -34,6 +36,10 @@ function App() {
     setErrorFetchingCakesList(undefined);
   };
 
+  const handleViewNewCakeForm = () => {
+    setIsAddingNewCake(true);
+  };
+
   return (
     <main className="app">
       <header className="header">
@@ -47,6 +53,10 @@ function App() {
           message={errorFetchingCakesList.message}
         />
       )}
+
+      <Box mb={4}>
+        <Button onClick={handleViewNewCakeForm}>Add cake</Button>{" "}
+      </Box>
 
       {!errorFetchingCakesList && (
         <Box component="ul">
