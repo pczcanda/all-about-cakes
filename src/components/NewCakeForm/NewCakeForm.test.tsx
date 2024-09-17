@@ -1,6 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { BaseCake } from "../../types";
 import NewCakeForm from "./NewCakeForm";
+import userEvent from "@testing-library/user-event";
 
 describe("<NewCakeForm /> component", () => {
   test("displays form fields", () => {
@@ -22,14 +23,16 @@ describe("<NewCakeForm /> component", () => {
     expect(submitButton).toBeDisabled();
   });
 
-  test("allows the submission of a valid form by enabling the submit button", () => {
+  test("allows the submission of a valid form by enabling the submit button and passing the data through", () => {
     const newCake: BaseCake = {
       name: "Madeira cake",
       comment: "This is a decent cake",
       yumFactor: 4,
     };
 
-    render(<NewCakeForm onSubmit={() => {}} />);
+    const submitFn = jest.fn();
+
+    render(<NewCakeForm onSubmit={submitFn} />);
 
     const nameField = screen.getByLabelText("Cake name");
     const commentField = screen.getByLabelText("Comment");
@@ -45,5 +48,12 @@ describe("<NewCakeForm /> component", () => {
     expect(yumFactorField).toHaveValue(newCake.yumFactor.toString());
 
     expect(submitButton).not.toBeDisabled();
+
+    userEvent.click(submitButton);
+
+    waitFor(() => {
+      expect(submitFn).toHaveBeenCalledTimes(1);
+      expect(submitFn).toHaveBeenCalledWith(newCake);
+    });
   });
 });
