@@ -9,7 +9,7 @@ const CakeSummary: React.FC<CakeSummaryProps> = ({ cake }) => {
           component="img"
           height={240}
           image={cake.imageUrl}
-          alt={`${cake.name} image`}
+          alt={`${cake.name}`}
         />
       )}
       <CardContent>

@@ -28,17 +28,17 @@ const CakePage: React.FC<{}> = () => {
         return;
       }
       try {
-        const cakeDetails = await fetchCake(cakeId);
+        // const cakeDetails = await fetchCake(cakeId);
 
-        setCake(cakeDetails);
+        // setCake(cakeDetails);
 
-        // setCake({
-        //   id: 1,
-        //   name: "Carrot cake",
-        //   comment: "The one and only",
-        //   imageUrl: "https://placehold.co/600x400",
-        //   yumFactor: 5,
-        // });
+        setCake({
+          id: 1,
+          name: "Carrot cake",
+          comment: "The one and only",
+          imageUrl: "https://placehold.co/600x400",
+          yumFactor: 5,
+        });
       } catch (e: any) {
         // handle Error
         setErrorFetchingCake({
